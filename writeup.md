@@ -58,6 +58,7 @@ I used a combination of HLS color and gradient thresholds to generate a binary i
 
 The code for my perspective transform is in `perspective_utils.py`.  The `birdeye()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
 
+```
 src = np.float32([[w, h-10],    # br
                   [0, h-10],    # bl
                   [546, 460],   # tl
@@ -66,6 +67,7 @@ dst = np.float32([[w, h],       # br
                   [0, h],       # bl
                   [0, 0],       # tl
                   [w, 0]])      # tr
+```
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
