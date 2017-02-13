@@ -40,18 +40,19 @@ I start by preparing "object points", which will be the (x, y, z) coordinates of
 
 I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result:
 
-![Camera Calibration](https://github.com/yyporsche/CarND-Advanced-Lane-Lines/pics/camera_calibration.png)
+![Camera Calibration](https://github.com/yyporsche/CarND-Advanced-Lane-Lines/raw/master/pics/camera_calibration.png)
 
 ###Pipeline (single images)
 
 ####1. Provide an example of a distortion-corrected image.
 To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
-![Distortion Correction](https://github.com/yyporsche/CarND-Advanced-Lane-Lines/pics/distort_correction.png)
+
+![Distortion Correction](https://github.com/yyporsche/CarND-Advanced-Lane-Lines/raw/master/pics/distort_correction.png)
 
 ####2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 I used a combination of HLS color and gradient thresholds to generate a binary image (thresholding steps at lines 13/14, 34-39, 52-58 and 67-69 in `binarization_utils.py`).  Here's an example of my output for this step.
 
-![Binarization](https://github.com/yyporsche/CarND-Advanced-Lane-Lines/pics/binarization.png)
+![Binarization](https://github.com/yyporsche/CarND-Advanced-Lane-Lines/raw/master/pics/binarization.png)
 
 ####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
@@ -68,7 +69,7 @@ dst = np.float32([[w, h],       # br
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
-![Perspective](https://github.com/yyporsche/CarND-Advanced-Lane-Lines/pics/perspective.png)
+![Perspective](https://github.com/yyporsche/CarND-Advanced-Lane-Lines/raw/master/pics/perspective.png)
 
 ####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
