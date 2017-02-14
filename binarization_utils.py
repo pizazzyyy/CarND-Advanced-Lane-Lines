@@ -83,7 +83,7 @@ def binarize(img, verbose=False):
     #HSV_yellow_mask = thresh_frame_in_HSV(img, yellow_HSV_th_min, yellow_HSV_th_max, verbose=False)
     #binary = np.logical_or(binary, HSV_yellow_mask)
     
-    HLS_mask = thresh_frame_in_HLS(img, HLS_th_min, HLS_th_max, verbose=True)
+    HLS_mask = thresh_frame_in_HLS(img, HLS_th_min, HLS_th_max, verbose=False)
     binary = np.logical_or(binary, HLS_mask)
 
     eq_white_mask = get_binary_from_equalized_grayscale(img)

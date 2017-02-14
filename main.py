@@ -69,7 +69,7 @@ def process_pipeline(frame, keep_state=True):
     img_undistorted = undistort(frame, mtx, dist, verbose=False)
 
     # binarize the frame s.t. lane lines are highlighted as much as possible
-    img_binary = binarize(img_undistorted, verbose=True)
+    img_binary = binarize(img_undistorted, verbose=False)
 
     # compute perspective transform to obtain bird's eye view
     img_birdeye, M, Minv = birdeye(img_binary, verbose=False)
@@ -99,19 +99,18 @@ if __name__ == '__main__':
     # first things first: calibrate the camera
     ret, mtx, dist, rvecs, tvecs = calibrate_camera(calib_images_dir='camera_cal')
 
-    # selector = 'project'
-    # clip = VideoFileClip('{}_video.mp4'.format(selector)).fl_image(process_pipeline)
-    # clip.write_videofile('out_{}_{}.mp4'.format(selector, time_window), audio=False)
-    #
+    selector = 'project'
+    clip = VideoFileClip('{}_video.mp4'.format(selector)).fl_image(process_pipeline)
+    clip.write_videofile('out_{}_{}.mp4'.format(selector, time_window), audio=False)
 
-    test_img_dir = 'test_images'
-    for test_img in os.listdir(test_img_dir):
+    #test_img_dir = 'test_images'
+    #for test_img in os.listdir(test_img_dir):
 
-        frame = cv2.imread(os.path.join(test_img_dir, test_img))
+        #frame = cv2.imread(os.path.join(test_img_dir, test_img))
 
-        blend = process_pipeline(frame, keep_state=False)
+        #blend = process_pipeline(frame, keep_state=False)
 
-        cv2.imwrite('output_images/{}'.format(test_img), blend)
+        #cv2.imwrite('output_images/{}'.format(test_img), blend)
 
-        plt.imshow(cv2.cvtColor(blend, code=cv2.COLOR_BGR2RGB))
-        plt.show()
+        #plt.imshow(cv2.cvtColor(blend, code=cv2.COLOR_BGR2RGB))
+        #plt.show()
