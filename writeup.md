@@ -75,19 +75,46 @@ I verified that my perspective transform was working as expected by drawing the 
 
 ####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+There are two conditions for the lane-line identification: if we have a new frame, we will use sliding windows search which is implemented in line_utils.get_fits_by_sliding_windows(): we will start from the bottom, find peak locations from the histogram of the binary image, there will be two windows sliding to the upper side of the image, deciding the two lane-lines
 
-![alt text][image5]
+If we confidently identified lane-lines in the previous frame, we can limit our search based on previous one which is implemented in line_utils.get_fits_by_previous_fits(). The following code is used to track the flow:
+
+```
+def __init__(self, buffer_len=10):
+
+    # flag to mark if the line was detected the last iteration
+    self.detected = False
+
+    # polynomial coefficients fitted on the last iteration
+    self.last_fit_pixel = None
+    self.last_fit_meter = None
+
+    # list of polynomial coefficients of the last N iterations
+    self.recent_fits_pixel = collections.deque(maxlen=buffer_len)
+    self.recent_fits_meter = collections.deque(maxlen=2 * buffer_len)
+
+    self.radius_of_curvature = None
+
+    # store all pixels coords (x, y) of line detected
+    self.all_x = None
+    self.all_y = None
+```
+The polynomial finding will be like:
+![Lane Polynomial](https://github.com/yyporsche/CarND-Advanced-Lane-Lines/raw/master/pics/lane_polynomial.png)
 
 ####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+The function compute_offset_from_center() in main.py will compute the offset from the middle of the lane. We can assume the car's deviation from the lane center is same as the distance from the center to the midpoint of the two lane-lines detected at the bottom.
+
+During lane-line detection phase, a 2nd order polynomial is fitted to each lane-line using np.polyfit(). This function returns the 3 coefficients of the curve: the 2nd and 1st order terms plus the bias. From this coefficients, following the equation from the class, we can compute the radius of curvature.
 
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+The whole processing pipeline, which starts from input frame and comprises undistortion, binarization, lane detection and de-warping back onto the original image, is implemented in function process_pipeline() in main.py.
 
-![alt text][image6]
+The following showed the result for one of the test images:
+
+![After Pipeline](https://github.com/yyporsche/CarND-Advanced-Lane-Lines/raw/master/output_images/test2.jpg)
 
 ---
 
@@ -95,7 +122,7 @@ I implemented this step in lines # through # in my code in `yet_another_file.py`
 
 ####1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](https://youtu.be/5zjN5NDLrDQ)
 
 ---
 
@@ -103,5 +130,5 @@ Here's a [link to my video result](./project_video.mp4)
 
 ####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+I used the following [git repo](https://github.com/ndrplz/self-driving-car/tree/master/project_4_advanced_lane_finding) as starting point of the project. For image threshold, I changed from HSV in original repo to HLS to have more robust lane finding.
 
